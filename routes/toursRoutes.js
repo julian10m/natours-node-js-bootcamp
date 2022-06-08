@@ -3,14 +3,13 @@ const toursController = require('../controllers/toursController');
 
 const router = express.Router();
 
-router.param('id', toursController.checkTourForId);
+// router.param('id', toursController.checkTourForId);
 
 // prettier-ignore
 router
   .route('/')
   .get(toursController.getAllTours)
-  .post(toursController.checkBody, 
-        toursController.createTour);
+  .post(toursController.createTour);
 // prettier-ignore
 router
   .route('/:id')

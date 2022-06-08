@@ -16,6 +16,10 @@ router
   .get(toursController.getTourStats);
 // prettier-ignore
 router
+  .route('/monthly-plan/:year')
+  .get(toursController.getMonthlyPlan);
+// prettier-ignore
+router
   .route('/')
   .get(toursController.getAllTours)
   .post(toursController.createTour);

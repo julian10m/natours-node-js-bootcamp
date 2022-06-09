@@ -1,8 +1,10 @@
 const express = require('express');
-const usersController = require('../controllers/usersController.js');
+const usersController = require('../controllers/usersController');
+const authController = require('../controllers/authController');
 
 const router = express.Router();
-
+// prettier-ignore
+router.post('/signup', authController.signup)
 // prettier-ignore
 router
     .route('/')

@@ -1,3 +1,4 @@
+const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../model/userModel');
 const AppError = require('../utils/appError');
@@ -14,6 +15,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
+    passwordChangedAt: req.body.passwordChangedAt,
   });
   const token = signToken(newUser._id);
   res.status(201).json({
@@ -37,4 +39,24 @@ exports.login = catchAsync(async (req, res, next) => {
     status: 'success',
     token,
   });
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer'))
+    return next(new AppError('The authorization header is missing', 401));
+  const token = authHeader.split(' ')[1];
+  const decodedToken = await promisify(jwt.verify)(
+    token,
+    process.env.JWT_SECRET
+  );
+  const loginUser = await User.findById(decodedToken.id);
+  if (!loginUser)
+    return next(new AppError('The user does no longer exist.', 401));
+  if (loginUser.changedPassword(decodedToken.iat))
+    return next(
+      new AppError('The password has changed, please login again!', 401)
+    );
+  req.user = loginUser;
+  next();
 });

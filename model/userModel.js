@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema({
       message: 'Password and confirmation differ',
     },
   },
+  passwordChangedAt: Date,
 });
 
 userSchema.pre('save', async function (next) {
@@ -43,6 +44,17 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.verifyPassword = async (candidatePass, userPass) =>
   await bcrypt.compare(candidatePass, userPass);
+
+userSchema.methods.changedPassword = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    return changedTimestamp > JWTTimestamp;
+  }
+  return false;
+};
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

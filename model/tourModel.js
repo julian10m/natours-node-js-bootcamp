@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+// const User = require('./userModel');
 // const validator = require('validator');
 
 const toursSchema = new mongoose.Schema(
@@ -78,12 +79,48 @@ const toursSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  //   { toJSON: { virtuals: true }, toObject: { virtuals: true }, id: false }
 );
 
 toursSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
+});
+
+toursSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'tour',
 });
 
 // Document Middleware: runs before save() and create()
@@ -92,6 +129,12 @@ toursSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
+
+// toursSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
 
 // toursSchema.pre('save', function (next) {
 //   console.log('Will save doc...');
@@ -109,6 +152,14 @@ toursSchema.pre(/^find/, function (next) {
   next();
 });
 
+toursSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
+  next();
+});
+
 toursSchema.post(/^find/, function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} ms`);
   next();
@@ -120,5 +171,5 @@ toursSchema.pre('aggregate', function (next) {
   next();
 });
 
-const Tour = mongoose.model('Tours', toursSchema);
+const Tour = mongoose.model('Tour', toursSchema);
 module.exports = Tour;

@@ -10,6 +10,7 @@ router
   .get(reviewsController.getAllReviews)
   .post(authController.protect, 
         authController.restrictTo('user'),
+        reviewsController.setTourAndUserIds,
         reviewsController.createReview);
 // prettier-ignore
 router

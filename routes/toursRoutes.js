@@ -1,6 +1,7 @@
 const express = require('express');
 const toursController = require('../controllers/toursController');
 const authController = require('../controllers/authController');
+const reviewsController = require('../controllers/reviewsController');
 
 const router = express.Router();
 
@@ -32,5 +33,10 @@ router
   .delete(authController.protect, 
           authController.restrictTo('admin', 'lead-guide'), 
           toursController.deleteTour);
-
+// prettier-ignore
+router
+  .route('/:tourId/reviews')
+  .post(authController.protect, 
+        authController.restrictTo('user'), 
+        reviewsController.createReview)
 module.exports = router;

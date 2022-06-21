@@ -15,6 +15,7 @@ router
 // prettier-ignore
 router
   .route('/:id')
+  .get(reviewsController.getReviewById)
   .patch(reviewsController.updateReview)
   .delete(reviewsController.deleteReview)
 

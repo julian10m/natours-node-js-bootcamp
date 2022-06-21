@@ -37,7 +37,7 @@ const importData = async (tours) => {
   process.exit();
 };
 const tours = JSON.parse(
-  fs.readFileSync('./dev-data/data/tours-simple.json', 'utf-8')
+  fs.readFileSync('./dev-data/data/tours.json', 'utf-8')
 );
 
 if (process.argv[2] === '--import') {

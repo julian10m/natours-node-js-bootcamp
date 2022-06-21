@@ -13,6 +13,11 @@ router.patch(
   authController.updatePassword
 );
 // prettier-ignore
+router.get('/me', 
+             authController.protect,
+             usersController.getMe,
+             usersController.getUserById);
+// prettier-ignore
 router.patch('/updateMe', 
              authController.protect, 
              usersController.updateMe);

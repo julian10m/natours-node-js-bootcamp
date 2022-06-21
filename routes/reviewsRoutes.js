@@ -14,5 +14,7 @@ router
 // prettier-ignore
 router
   .route('/:id')
+  .patch(reviewsController.updateReview)
   .delete(reviewsController.deleteReview)
+
 module.exports = router;

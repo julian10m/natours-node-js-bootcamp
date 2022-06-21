@@ -11,5 +11,8 @@ router
   .post(authController.protect, 
         authController.restrictTo('user'),
         reviewsController.createReview);
-
+// prettier-ignore
+router
+  .route('/:id')
+  .delete(reviewsController.deleteReview)
 module.exports = router;

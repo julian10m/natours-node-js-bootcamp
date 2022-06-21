@@ -7,29 +7,19 @@ router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
-router.patch(
-  '/updatePassword',
-  authController.protect,
-  authController.updatePassword
-);
-// prettier-ignore
-router.get('/me', 
-             authController.protect,
-             usersController.getMe,
-             usersController.getUserById);
-// prettier-ignore
-router.patch('/updateMe', 
-             authController.protect, 
-             usersController.updateMe);
-// prettier-ignore
-router.delete('/deleteMe', 
-             authController.protect, 
-             usersController.deleteMe);
-// prettier-ignore
+
+router.use(authController.protect);
+
+router.patch('/updatePassword', authController.updatePassword);
+router.get('/me', usersController.getMe, usersController.getUserById);
+router.patch('/updateMe', usersController.updateMe);
+router.delete('/deleteMe', usersController.deleteMe);
+
+router.use(authController.restrictTo('admin'));
 router
-    .route('/')
-    .get(usersController.getAllUsers)
-    .post(usersController.createUser);
+  .route('/')
+  .get(usersController.getAllUsers)
+  .post(usersController.createUser);
 // prettier-ignore
 router
     .route('/:id')

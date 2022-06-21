@@ -19,23 +19,35 @@ router
 router
   .route('/tour-stats')
   .get(toursController.getTourStats);
-// prettier-ignore
+
 router
   .route('/monthly-plan/:year')
-  .get(toursController.getMonthlyPlan);
-// prettier-ignore
+  .get(
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide', 'guide'),
+    toursController.getMonthlyPlan
+  );
+
 router
   .route('/')
-  .get(authController.protect, 
-       toursController.getAllTours)
-  .post(toursController.createTour);
-// prettier-ignore
+  .get(toursController.getAllTours)
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
+    toursController.createTour
+  );
 router
   .route('/:id')
   .get(toursController.getTourById)
-  .patch(toursController.updateTour)
-  .delete(authController.protect, 
-          authController.restrictTo('admin', 'lead-guide'), 
-          toursController.deleteTour);
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
+    toursController.updateTour
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
+    toursController.deleteTour
+  );
 
 module.exports = router;

@@ -56,7 +56,7 @@ app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/reviews', reviewsRouter);
 
 app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+  next(new AppError(`Oups! Can't find ${req.originalUrl} on this server`, 404));
 });
 
 app.use(globalErrorHandler);

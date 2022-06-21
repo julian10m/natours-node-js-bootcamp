@@ -3,20 +3,27 @@ const reviewsController = require('../controllers/reviewsController');
 const authController = require('../controllers/authController');
 
 const router = express.Router({ mergeParams: true });
+router.use(authController.protect);
 
-// prettier-ignore
 router
   .route('/')
   .get(reviewsController.getAllReviews)
-  .post(authController.protect, 
-        authController.restrictTo('user'),
-        reviewsController.setTourAndUserIds,
-        reviewsController.createReview);
-// prettier-ignore
+  .post(
+    authController.restrictTo('user'),
+    reviewsController.setTourAndUserIds,
+    reviewsController.createReview
+  );
+
 router
   .route('/:id')
   .get(reviewsController.getReviewById)
-  .patch(reviewsController.updateReview)
-  .delete(reviewsController.deleteReview)
+  .patch(
+    authController.restrictTo('user', 'admin'),
+    reviewsController.updateReview
+  )
+  .delete(
+    authController.restrictTo('user', 'admin'),
+    reviewsController.deleteReview
+  );
 
 module.exports = router;

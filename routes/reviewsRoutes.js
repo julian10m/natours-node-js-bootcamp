@@ -1,7 +1,9 @@
 const express = require('express');
 const reviewsController = require('../controllers/reviewsController');
 const authController = require('../controllers/authController');
-
+// Allows to get the params that were present in the
+// URL before redirecting the endpoint to the one in 
+// in this router.
 const router = express.Router({ mergeParams: true });
 router.use(authController.protect);
 

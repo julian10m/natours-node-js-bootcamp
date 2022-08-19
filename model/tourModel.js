@@ -102,6 +102,7 @@ const toursSchema = new mongoose.Schema(
         day: Number,
       },
     ],
+    // guides: Array
     guides: [
       {
         type: mongoose.Schema.ObjectId,
@@ -113,6 +114,8 @@ const toursSchema = new mongoose.Schema(
   //   { toJSON: { virtuals: true }, toObject: { virtuals: true }, id: false }
 );
 
+// Adding indexes so that reading operations are performed
+// faster, though not useful if there are many write ops.
 toursSchema.index({ price: 1, ratingsAverage: -1 });
 toursSchema.index({ slug: 1 });
 
@@ -120,6 +123,7 @@ toursSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+// This generates a virtual populate.
 toursSchema.virtual('reviews', {
   ref: 'Review',
   localField: '_id',
@@ -155,6 +159,9 @@ toursSchema.pre(/^find/, function (next) {
   next();
 });
 
+// This is to populate the documents that are referenced,
+// i.e., instead of just the Ids, we see all the data of
+// each of the referred objects.
 toursSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',

@@ -57,6 +57,8 @@ exports.getOne = (Model, populateOptions) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
+    // To allow for nested get reviews on tour...
+    // ...but it is a hack that should be improved.
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
     const features = new APIFeatures(Model.find(filter), req.query)
@@ -64,6 +66,8 @@ exports.getAll = (Model) =>
       .sort()
       .select()
       .paginate();
+    // We can call explain() on the query to obtain statistics.
+    // const allModelObj = await features.query.explain();  
     const allModelObj = await features.query;
     res.status(200).json({
       status: 'success',

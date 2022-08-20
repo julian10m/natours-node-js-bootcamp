@@ -75,6 +75,8 @@ reviewsSchema.statics.calcAverageRatings = async function (tourId) {
   }
 };
 
+reviewsSchema.index({ tour: 1, user: 1 }, { unique: true })
+
 // Remeber that post middlewares do not get access to next()
 // This is called when we create a new review.
 reviewsSchema.post('save', async function () {
@@ -107,7 +109,10 @@ reviewsSchema.post('save', async function () {
 
 reviewsSchema.post(
   /^findOneAnd/,
-  async (doc) => await doc.constructor.calcAverageRatings(doc.tour)
+  async (doc) => {
+    if (doc)
+      await doc.constructor.calcAverageRatings(doc.tour)
+  }
 );
 
 const Review = mongoose.model('Review', reviewsSchema);

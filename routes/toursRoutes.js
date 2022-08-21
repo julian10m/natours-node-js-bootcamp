@@ -10,11 +10,15 @@ const router = express.Router();
 // prettier-ignore
 router.use('/:tourId/reviews', reviewsRouter);
 
+router
+  .route("/tours-within/:distance/center/:latlng/unit/:unit")
+  .get(toursController.getToursWithin)
+
 // prettier-ignore
 router
   .route('/top-5-cheap')
-  .get(toursController.aliasTopTours, 
-       toursController.getAllTours);
+  .get(toursController.aliasTopTours,
+    toursController.getAllTours);
 // prettier-ignore
 router
   .route('/tour-stats')

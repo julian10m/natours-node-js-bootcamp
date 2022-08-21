@@ -119,6 +119,7 @@ const toursSchema = new mongoose.Schema(
 // faster, though not useful if there are many write ops.
 toursSchema.index({ price: 1, ratingsAverage: -1 });
 toursSchema.index({ slug: 1 });
+toursSchema.index({ startLocation: '2dsphere' });
 
 toursSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;

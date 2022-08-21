@@ -14,6 +14,10 @@ router
   .route("/tours-within/:distance/center/:latlng/unit/:unit")
   .get(toursController.getToursWithin)
 
+router
+  .route("/distances/:latlng/unit/:unit")
+  .get(toursController.getDistances)
+
 // prettier-ignore
 router
   .route('/top-5-cheap')

@@ -83,6 +83,21 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  const token = req.cookies?.jwt;
+  if (token) {
+    const decodedToken = await promisify(jwt.verify)(
+      token,
+      process.env.JWT_SECRET
+    );
+    const loginUser = await User.findById(decodedToken.id);
+    if (loginUser && !loginUser.changedPassword(decodedToken.iat))
+      res.locals.user = loginUser;
+  }
+  next();
+});
+
+
 exports.restrictTo = function (...roles) {
   return (req, res, next) => {
     if (!roles.includes(req.user.role))

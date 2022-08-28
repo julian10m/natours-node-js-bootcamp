@@ -1,0 +1,29 @@
+Data modelling is mainly about deciding whether we are going to reference or embed data, which are respectively referred to as normalizing and denormalizing the data. 
+The case of referenced data is what we usually see in RDBs, where each table has a key, and relates to other tables via foreign keys. 
+On the other hand, embeding data is what characterizes No-SQL DBs, which allow to directly place objects as fields.
+In particular, both options are available in MongoDB.
+
+In general it is possible to model data in many different ways, all of which might work okay, but better desings usually lead to better performance.
+Hence, a question that raises naturally is how to choose between referencing and embedding data.
+There are no hard rules to answer this question, and usually experience helps to choose. 
+However, in any case, there are at least 3 guildelines that might always help to decide: considering the relationship type among the different pieces of data that we have, analyzing the data access pattern and lastly the closeness of the data.
+
+A priori, referenced models make sense for large datasets involving many-to-many relationships or one-to-many with multiple values, where data might be updated regularly and each model might be queried independently despite the relationship that might exist among the data.
+On the other hand, embedding data is convenient when we have one-to-many relationships with a value mapping to few options, when we know that data will mostly not change and we expect a high read/write ratio, and also when the models we are handling are closely bound with each other, i.e., whenever we search for one model, we will very likely need the values of another related model.
+
+In addition, there are different ways of referencing data in MongoDB: child, parent and two-way referencing.
+In the first, given a one-to-many relationship, the one element keeps a list referencing each of its many related obects.
+On the other hand, parent referencing occurs when the reference is held on the opposite direction: each of the many elements that relate to one specific object know about this object, but the opposite is not true.
+Finally, with two-way referencing, the references are actually kept in both directions, a instinctively better strategy when dealing with many-to-many relationships.
+
+Moongose allows has a "virtual populate" feature that allows parent elements to keep a reference to its children, even when we are just using parent referencing (and thus only the children keep a reference to their parent). This reference is not persisted, i.e., this is not the same as implementing child referenciation on the parent. 
+
+In MongoDB we can create indexes to improve the read performance, which might not be that useful if we are constantly writing values such that the indexes will need to be recomputed very often.	
+
+Moongose -> query and document middleware
+
+Rendering
+It referes to building of the website that the users see. The options are client-side or server-side. In the first, typically, the data is obtained from the server using an API, and the pages constructed on the client-side. On the other hand, in server-side cases, all happens in the backend.
+
+Pug: template engine.
+CSS: BEM Architecture	

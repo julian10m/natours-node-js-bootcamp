@@ -54,15 +54,20 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
+  let token = undefined;
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer'))
+  if (authHeader?.startsWith('Bearer')) {
+    token = authHeader.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  } else {
     return next(
       new AppError(
         'You are not logged in, i.e., the authorization header is missing',
         401
       )
     );
-  const token = authHeader.split(' ')[1];
+  }
   const decodedToken = await promisify(jwt.verify)(
     token,
     process.env.JWT_SECRET

@@ -28,7 +28,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       'child-src': ['blob:'],
-      'connect-src': ["'self'", 'https://*.mapbox.com'],
+      'connect-src': ["'self'", 'https://*.mapbox.com', 'ws://localhost:*/'],
       'default-src': ["'self'"],
       'font-src': ["'self'", 'https://fonts.gstatic.com'],
       'img-src': ["'self'", 'data:', 'blob:'],

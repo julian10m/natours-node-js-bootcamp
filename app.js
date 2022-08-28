@@ -32,7 +32,8 @@ app.use(helmet({
       'font-src': ["'self'", 'https://fonts.gstatic.com'],
       'img-src': ["'self'", 'data:', 'blob:'],
       'script-src': ["'self'", 'https://*.mapbox.com'],
-      'style-src': ["'self'", 'https:'],
+      'style-src': ["'self'", "https: 'unsafe-inline'"],
+      // 'style-src': ["'self'", "https:", "'sha256-2LsQpejoyTLfBAE8bzIvpZiyalNp3uIriW3eZ05/XRc='"],
       'worker-src': ['blob:']
     }
   }

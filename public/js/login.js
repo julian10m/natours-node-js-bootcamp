@@ -19,3 +19,20 @@ export const login = async (email, password) => {
         window.setTimeout(hideAlert, 2000);
     }
 }
+
+export const logout = async () => {
+    try {
+        const res = await axios({
+            method: 'GET',
+            url: 'http://localhost:3000/api/v1/users/logout',
+        });
+        console.log(res);
+        if (res.data.status === 'success') {
+            console.log('location to be reloaded');
+            location.assign('/');
+        }
+    } catch (err) {
+        showAlert('error', err);
+        window.setTimeout(hideAlert, 2000);
+    }
+}

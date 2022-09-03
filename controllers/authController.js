@@ -53,6 +53,14 @@ exports.login = catchAsync(async (req, res, next) => {
   createAndSendToken(res, user, 200);
 });
 
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  });
+  res.status(200).json({ status: 'success' });
+}
+
 exports.protect = catchAsync(async (req, res, next) => {
   let token = undefined;
   const authHeader = req.headers.authorization;
@@ -85,7 +93,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
   const token = req.cookies?.jwt;
-  if (token) {
+  if (token && token !== 'loggedout') {
     const decodedToken = await promisify(jwt.verify)(
       token,
       process.env.JWT_SECRET
@@ -96,7 +104,6 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   }
   next();
 });
-
 
 exports.restrictTo = function (...roles) {
   return (req, res, next) => {

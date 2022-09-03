@@ -29,7 +29,7 @@ export const logout = async () => {
         console.log(res);
         if (res.data.status === 'success') {
             console.log('location to be reloaded');
-            location.assign('/');
+            location.reload(true);
         }
     } catch (err) {
         showAlert('error', err);

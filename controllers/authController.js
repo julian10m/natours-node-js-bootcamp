@@ -68,7 +68,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = authHeader.split(' ')[1];
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
-  } else {
+  }
+  if (!token || token === 'loggedout') {
     return next(
       new AppError(
         'You are not logged in, i.e., the authorization header is missing',

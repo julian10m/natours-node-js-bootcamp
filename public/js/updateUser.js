@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { hideAlert, showAlert } from './alerts'
 
-export const updateData = async (name, email) => {
+export const updateSettings = async (data, type) => {
     try {
+        const url = `http://localhost:3000/api/v1/users/${type === 'data' ? 'updateMe' : 'updatePassword'}`;
+        console.log(url);
         const res = await axios({
-            method: 'PATCH',
-            url: 'http://localhost:3000/api/v1/users/updateMe',
-            data: { name, email }
+            method: 'PATCH', url, data
         });
         if (res.data.status === 'success')
-            showAlert('success', 'Settings were updated!');
+            showAlert('success', `${type.toUpperCase()} updated succesfully!`);
         window.setTimeout(() => {
             hideAlert();
             location.reload(true);

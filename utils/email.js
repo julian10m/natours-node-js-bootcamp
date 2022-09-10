@@ -7,12 +7,22 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Pepo <${process.env.EMAIL_FROM}>`;
+    this.from = process.env.NODE_ENV === 'production' ? `Pepo <${process.env.SENDGRID_FROM}>` :
+      `Pepo <${process.env.EMAIL_FROM}>`;
   }
 
   createTransport() {
     if (process.env.NODE_ENV === 'production') {
-      return 1;
+      return nodemailer.createTransport({
+        service: 'SendGrid',
+        auth: {
+          user: process.env.SENDGRID_USERNAME,
+          pass: process.env.SENDGRID_PASSWORD
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      });
     }
     return nodemailer.createTransport({
       //     service: 'Gmail',
@@ -43,5 +53,9 @@ module.exports = class Email {
 
   async sendWelcome() {
     await this.send('welcome', 'Welcome to the Natours Family!');
+  }
+
+  async sendPasswordReset() {
+    await this.send('passwordReset', 'Password reset token');
   }
 }

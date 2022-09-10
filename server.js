@@ -25,7 +25,7 @@ const app = require('./app');
 const LISTENING_PORT = +process.env.PORT;
 // console.log(process.env);
 const server = app.listen(LISTENING_PORT, () =>
-  console.log(`Server running on port ${LISTENING_PORT}...`)
+  console.log(`Server running on ${process.env.NODE_ENV.toUpperCase()} mode, using port ${LISTENING_PORT}...`)
 );
 
 process.on('unhandledRejection', (err) => {

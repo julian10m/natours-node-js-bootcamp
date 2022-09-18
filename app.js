@@ -28,13 +28,13 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: {
     directives: {
-      'child-src': ['blob:'],
+      'child-src': ['blob:', 'https://*.stripe.com'],
       // 'connect-src': ["'self'", 'https://*.mapbox.com', 'ws://localhost:*/', 'ws://127.0.0.1:*/'],
-      'connect-src': ["'self'", 'https://*.mapbox.com', 'ws://localhost:*/'],
+      'connect-src': ["'self'", 'https://*.mapbox.com', 'https://*.stripe.com', 'ws://localhost:*/'],
       'default-src': ["'self'"],
       'font-src': ["'self'", 'https://fonts.gstatic.com'],
       'img-src': ["'self'", 'data:', 'blob:'],
-      'script-src': ["'self'", 'https://*.mapbox.com', 'https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js'],
+      'script-src': ["'self'", 'https://*.mapbox.com', 'https://*.stripe.com', 'https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js'],
       'style-src': ["'self'", "https: 'unsafe-inline'"],
       // 'style-src': ["'self'", "https:", "'sha256-2LsQpejoyTLfBAE8bzIvpZiyalNp3uIriW3eZ05/XRc='"],
       'worker-src': ['blob:']

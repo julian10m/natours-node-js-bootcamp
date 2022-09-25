@@ -3,9 +3,12 @@ import { hideAlert, showAlert } from './alerts'
 
 export const login = async (email, password) => {
     try {
+        const url = process.env.NODE_ENV === 'production' ?
+            '/api/v1/users/login' :
+            'http://localhost:3000/api/v1/users/login';
         const res = await axios({
             method: 'POST',
-            url: 'http://localhost:3000/api/v1/users/login',
+            url,
             data: { email, password }
         });
         if (res.data.status === 'success')
@@ -22,13 +25,16 @@ export const login = async (email, password) => {
 
 export const logout = async () => {
     try {
+        const url = process.env.NODE_ENV === 'production' ?
+            '/api/v1/users/logout' :
+            'http://localhost:3000/api/v1/users/logout';
         const res = await axios({
             method: 'GET',
-            url: 'http://localhost:3000/api/v1/users/logout',
+            url,
         });
-        console.log(res);
+        // console.log(res);
         if (res.data.status === 'success') {
-            console.log('location to be reloaded');
+            // console.log('location to be reloaded');
             location.reload(true);
         }
     } catch (err) {

@@ -4,7 +4,10 @@ import axios from 'axios';
 
 export const bookTour = async tourId => {
     try {
-        const sessionResp = await axios(`http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`);
+        const url = process.env.NODE_ENV === 'production' ?
+            `/api/v1/bookings/checkout-session/${tourId}` :
+            `http://localhost:3000/api/v1/bookings/checkout-session/${tourId}`;
+        const sessionResp = await axios(url);
         // console.log(sessionResp);
         await stripe.redirectToCheckout({
             sessionId: sessionResp.data.session.id

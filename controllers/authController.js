@@ -40,8 +40,10 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordChangedAt: req.body.passwordChangedAt,
     role: req.body.role,
   });
-  // const url = `${req.protocol}://${req.get('host')}/me`;
-  const url = `${req.protocol}://localhost:3000/me`;
+
+  const url = process.env.NODE_ENV === 'production' ?
+    `${req.protocol}://${req.get('host')}/me` :
+    `${req.protocol}://localhost:3000/me`;
   await new Email(newUser, url).sendWelcome();
   createAndSendToken(res, newUser, 201);
 });
